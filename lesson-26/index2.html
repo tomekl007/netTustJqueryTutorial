@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset=utf-8>
+	<title>jQuery Deferreds</title>
+</head>
+<style>
+.box{
+		width: 200px;
+		height: 200px;
+		background: green;
+		display: inline-block;
+		margin-right: 3em;
+	}
+	</style>
+</head>
+<body>
+
+<div class="box">my box </div>
+<div class="box">my box </div>
+<div class="box">my box </div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+
+<script>
+
+var myVar;
+
+
+var setVal = function(){
+   	var deferred = new $.Deferred();
+   	
+   	setTimeout(function(){
+		myVar = 'my value';
+		console.log(myVar + 'in the timeout');
+		deferred.resolve();//.reject
+	},2000);
+
+	return deferred.promise();
+};
+
+//.fails .always
+// setVal().done(function(){
+// 	console.log('all done ' + myVar);
+// }).fail(function(){
+// 	console.log('failed');
+// });
+
+setVal().then(
+	function(){
+		console.log('all done ' + myVar);
+	},
+	function () {
+		console.log('failed');
+	}
+
+
+);
+
+
+
+
+
+
+$.searchTwitter = function(search){
+	 var dfd = new $.Deferred();
+	 return $.ajax({
+	 	url: 'http://search.twitter.com/search.json',
+	 	data: {q: search},
+	 	dataType: 'jsonp',
+	 	//success: dfd.resolve(),
+	 	//error: dfd.reject
+	 }).promise();
+
+	 
+};
+
+var outer = $.searchTwitter('cats');
+
+outer.then(function(results){
+	console.log(results);
+});
+
+//----
+outer.then(function(results){
+	console.log('something else');
+});
+
+$('div.box').each(function(i){
+	$(this).delay( 1000 * i++).fadeOut(1000);
+	
+}).promise().done(function(){
+	console.log("all anim step by");
+});
+
+
+function getTweets (search) {
+	return $.ajax({
+		url:'http://search.twitter.com/search.json',
+		data: {q: search },
+		dataType: 'jsonp'
+	});
+}
+
+$.when( getTweets('dogs'), getTweets('cats')).done(function(res1, res2){
+	console.log('done two getTweets')
+	console.log(res1);
+	console.log(res2);
+});
+
+</script>
+
+</body>
+</html>
+
+
+

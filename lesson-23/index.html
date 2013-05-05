@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+</script>
+
+
+
+
+	<meta charset=utf-8>
+	<title>AJAX: load</title>
+	
+</head>
+<body>
+
+<a href="about.html">learn about</a>
+<br>
+<a href="contact.html">contact name</a>
+
+<div class="wrap"></div>
+<script>
+
+(function(){
+
+var wrap = $('div.wrap');
+$('a').on('mouseover', function(e){
+	var href = $(this).attr('href');
+	wrap.load(href + ' .container' );
+    
+	e.preventDefault();
+});
+})();
+
+</script>
+
+
+</body>
+</html>
+
+
+
